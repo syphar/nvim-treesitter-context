@@ -6,6 +6,8 @@ local parsers = require'nvim-treesitter.parsers'
 local augroup = api.nvim_create_augroup
 local command = api.nvim_create_user_command
 
+---@diagnostic disable:invisible
+
 --- @class Config
 --- @field enable boolean
 --- @field max_lines integer
@@ -67,12 +69,6 @@ local function get_root_node()
   return tree:root()
 end
 
---- @class TSNode
---- @field parent fun(TSNode): TSNode?
---- @field start fun(TSNode): integer, integer
---- @field range fun(TSNode): integer, integer, integer, integer
---- @field named_descendant_for_range fun(TSNode, integer, integer, integer, integer): TSNode
-
 --- @param node TSNode
 --- @param query Query
 --- @return Range?
@@ -109,8 +105,6 @@ local function is_valid(node, query)
     end
   end
 end
-
---- @alias Range {[1]: integer, [2]: integer, [3]: integer, [4]: integer}
 
 --- @param range Range
 --- @return string[]?, Range?
@@ -465,11 +459,13 @@ local function highlight_contexts(bufnr, ctx_bufnr, contexts)
 
   local buf_query = buf_highlighter:get_query(parsers.ft_to_lang(vim.bo.filetype))
 
-  local query = buf_query:query()
+  local query = assert(buf_query:query())
   local root = get_root_node()
 
   for i, context in ipairs(contexts) do
-    local start_row, _, end_row, end_col = unpack(context.range)
+    local start_row = context.range[1]
+    local end_row = context.range[3]
+    local end_col = context.range[4]
     local indents = context.indents
     local lines = context.lines
 
@@ -668,6 +664,7 @@ end)
 local function autocmd_for_group(group)
   local gid = augroup(group, {})
   return function(event, opts)
+    ---@diagnostic disable:no-unknown
     if opts then
       if type(opts) == 'function' then
         opts = { callback = opts }
