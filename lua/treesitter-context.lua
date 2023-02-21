@@ -86,15 +86,20 @@ local function is_valid(node, query)
     local r = false
 
     for id, node0 in pairs(match --[[@as table<integer,TSNode>]]) do
+      local srow, scol, erow, ecol = node0:range()
+
+      -- because iter_node != node we could match outside of node
+      if srow < range[1] then
+        break
+      end
+
       local name = query.captures[id] -- name of the capture in the query
       if not r and name == 'context' then
         r = node == node0
       elseif name == 'context.final' then
-        local _, _, erow, ecol = node0:range()
         range[3] = erow
         range[4] = ecol
       elseif name == 'context.end' then
-        local srow, scol = node0:range()
         range[3] = srow
         range[4] = scol
       end
