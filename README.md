@@ -36,6 +36,7 @@ use 'nvim-treesitter/nvim-treesitter-context'
   - [x] `cpp`
   - [x] `typescript`
   - [x] `rust`
+  - [X] `fish`
   - [X] `go`
   - [X] `javascript`
   - [x] `json`
@@ -82,7 +83,6 @@ use 'nvim-treesitter/nvim-treesitter-context'
   - [ ] `embedded_template`
   - [ ] `erlang`
   - [ ] `fennel`
-  - [ ] `fish`
   - [ ] `foam`
   - [ ] `fsh`
   - [ ] `func`
