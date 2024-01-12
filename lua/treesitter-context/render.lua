@@ -157,7 +157,7 @@ local function highlight_contexts(bufnr, ctx_bufnr, contexts)
             end_row = merow,
             end_col = necol,
             priority = priority + p,
-            hl_group = hl
+            hl_group = hl,
           })
 
           -- TODO(lewis6991): Extmarks of equal priority appear to apply
@@ -363,6 +363,7 @@ function M.open(bufnr, winid, ctx_ranges, ctx_lines)
     return
   end
 
+  vim.print(ctx_ranges)
   highlight_contexts(bufnr, ctx_bufnr, ctx_ranges)
   highlight_bottom(ctx_bufnr, win_height - 1)
   horizontal_scroll_contexts()

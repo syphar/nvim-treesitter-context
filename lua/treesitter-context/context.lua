@@ -243,6 +243,11 @@ function M.get(bufnr, winid)
         if range0 then
           local range, lines = get_text_for_range(range0)
 
+          -- temporary hack: remove all newlines
+          local single_line, _ = string.gsub(table.concat(lines, ' '), '%s+', ' ')
+          lines = { single_line }
+          range[3] = range[1]
+
           local last_context = context_ranges[#context_ranges]
           if last_context and parent_start_row == last_context[1] then
             -- If there are multiple contexts on the same row, then prefer the inner
